@@ -21,24 +21,26 @@ import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
+import LandingNavbar from "components/Navbars/LandingNavbar.js";
 import Footer from "components/Footer/Footer.js";
-import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
+
+import Login from "views/Login";
 
 import logo from "assets/img/react-logo.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 
 var ps;
 
-function Admin(props) {
+function Landing() {
 	const location = useLocation();
 	const mainPanelRef = React.useRef(null);
 	const [sidebarOpened, setsidebarOpened] = React.useState(
 		document.documentElement.className.indexOf("nav-open") !== -1
 	);
+
 	React.useEffect(() => {
 		if (navigator.platform.indexOf("Win") > -1) {
 			document.documentElement.className += " perfect-scrollbar-on";
@@ -56,9 +58,7 @@ function Admin(props) {
 			if (navigator.platform.indexOf("Win") > -1) {
 				ps.destroy();
 				document.documentElement.classList.add("perfect-scrollbar-off");
-				document.documentElement.classList.remove(
-					"perfect-scrollbar-on"
-				);
+				document.documentElement.classList.remove("perfect-scrollbar-on");
 			}
 		};
 	});
@@ -82,7 +82,7 @@ function Admin(props) {
 	};
 	const getRoutes = routes => {
 		return routes.map((prop, key) => {
-			if (prop.layout === "/admin") {
+			if (prop.layout === "/landing") {
 				return (
 					<Route
 						path={prop.layout + prop.path}
@@ -97,10 +97,7 @@ function Admin(props) {
 	};
 	const getBrandText = path => {
 		for (let i = 0; i < routes.length; i++) {
-			if (
-				location.pathname.indexOf(routes[i].layout + routes[i].path) !==
-				-1
-			) {
+			if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
 				return routes[i].name;
 			}
 		}
@@ -111,34 +108,17 @@ function Admin(props) {
 			{({ color, changeColor }) => (
 				<React.Fragment>
 					<div className="wrapper">
-						<Sidebar
-							routes={routes}
-							logo={{
-								outterLink: "https://www.creative-tim.com/",
-								text: "Creative Tim",
-								imgSrc: logo,
-							}}
-							toggleSidebar={toggleSidebar}
-						/>
-						<div
-							className="main-panel"
-							ref={mainPanelRef}
-							data={color}>
-							<AdminNavbar
-								brandText={getBrandText(location.pathname)}
+						<div className="main-panel" ref={mainPanelRef} data={color}>
+							<LandingNavbar
+								brandText={"ArtHub"}
 								toggleSidebar={toggleSidebar}
 								sidebarOpened={sidebarOpened}
 							/>
+							{/* switch for the elements to be rendered */}
 							<Switch>
 								{getRoutes(routes)}
-								<Redirect from="*" to="/admin/dashboard" />
+								<Redirect from="*" to="/landing/login" />
 							</Switch>
-							{
-								// we don't want the Footer to be rendered on map page
-								location.pathname === "/admin/maps" ? null : (
-									<Footer fluid />
-								)
-							}
 						</div>
 					</div>
 					<FixedPlugin bgColor={color} handleBgClick={changeColor} />
@@ -148,4 +128,4 @@ function Admin(props) {
 	);
 }
 
-export default Admin;
+export default Landing;

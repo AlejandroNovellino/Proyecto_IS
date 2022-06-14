@@ -21,8 +21,7 @@ import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import Footer from "components/Footer/Footer.js";
+import ArtistNavbar from "components/Navbars/ArtistNavbar";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
@@ -33,7 +32,7 @@ import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 
 var ps;
 
-function Admin(props) {
+function HomeArtist(props) {
 	const location = useLocation();
 	const mainPanelRef = React.useRef(null);
 	const [sidebarOpened, setsidebarOpened] = React.useState(
@@ -56,9 +55,7 @@ function Admin(props) {
 			if (navigator.platform.indexOf("Win") > -1) {
 				ps.destroy();
 				document.documentElement.classList.add("perfect-scrollbar-off");
-				document.documentElement.classList.remove(
-					"perfect-scrollbar-on"
-				);
+				document.documentElement.classList.remove("perfect-scrollbar-on");
 			}
 		};
 	});
@@ -82,7 +79,7 @@ function Admin(props) {
 	};
 	const getRoutes = routes => {
 		return routes.map((prop, key) => {
-			if (prop.layout === "/admin") {
+			if (prop.layout === "/artist") {
 				return (
 					<Route
 						path={prop.layout + prop.path}
@@ -97,10 +94,7 @@ function Admin(props) {
 	};
 	const getBrandText = path => {
 		for (let i = 0; i < routes.length; i++) {
-			if (
-				location.pathname.indexOf(routes[i].layout + routes[i].path) !==
-				-1
-			) {
+			if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
 				return routes[i].name;
 			}
 		}
@@ -120,25 +114,12 @@ function Admin(props) {
 							}}
 							toggleSidebar={toggleSidebar}
 						/>
-						<div
-							className="main-panel"
-							ref={mainPanelRef}
-							data={color}>
-							<AdminNavbar
+						<div className="main-panel" ref={mainPanelRef} data={color}>
+							<ArtistNavbar
 								brandText={getBrandText(location.pathname)}
 								toggleSidebar={toggleSidebar}
 								sidebarOpened={sidebarOpened}
 							/>
-							<Switch>
-								{getRoutes(routes)}
-								<Redirect from="*" to="/admin/dashboard" />
-							</Switch>
-							{
-								// we don't want the Footer to be rendered on map page
-								location.pathname === "/admin/maps" ? null : (
-									<Footer fluid />
-								)
-							}
 						</div>
 					</div>
 					<FixedPlugin bgColor={color} handleBgClick={changeColor} />
@@ -148,4 +129,4 @@ function Admin(props) {
 	);
 }
 
-export default Admin;
+export default HomeArtist;
