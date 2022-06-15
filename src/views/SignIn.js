@@ -132,7 +132,7 @@ function SignIn() {
 												/>
 											</FormGroup>
 										</Col>
-										<Col className="px-md-1" md="6">
+										<Col className="pr-md-1" md="6">
 											<FormGroup>
 												<label>Email</label>
 												<Input

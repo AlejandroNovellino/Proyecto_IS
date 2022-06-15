@@ -22,14 +22,10 @@ import PerfectScrollbar from "perfect-scrollbar";
 
 // core components
 import LandingNavbar from "components/Navbars/LandingNavbar.js";
-import Footer from "components/Footer/Footer.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 
-import Login from "views/Login";
-
-import logo from "assets/img/react-logo.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 
 var ps;
@@ -95,14 +91,7 @@ function Landing() {
 			}
 		});
 	};
-	const getBrandText = path => {
-		for (let i = 0; i < routes.length; i++) {
-			if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
-				return routes[i].name;
-			}
-		}
-		return "Brand";
-	};
+
 	return (
 		<BackgroundColorContext.Consumer>
 			{({ color, changeColor }) => (

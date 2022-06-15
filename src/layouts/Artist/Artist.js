@@ -32,7 +32,7 @@ import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 
 var ps;
 
-function HomeArtist(props) {
+function Artist(props) {
 	const location = useLocation();
 	const mainPanelRef = React.useRef(null);
 	const [sidebarOpened, setsidebarOpened] = React.useState(
@@ -120,6 +120,11 @@ function HomeArtist(props) {
 								toggleSidebar={toggleSidebar}
 								sidebarOpened={sidebarOpened}
 							/>
+							{/* switch for the elements to be rendered */}
+							<Switch>
+								{getRoutes(routes)}
+								<Redirect from="*" to="/artist/projects" />
+							</Switch>
 						</div>
 					</div>
 					<FixedPlugin bgColor={color} handleBgClick={changeColor} />
@@ -129,4 +134,4 @@ function HomeArtist(props) {
 	);
 }
 
-export default HomeArtist;
+export default Artist;

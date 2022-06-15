@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import AdminLayout from "layouts/Admin/Admin.js";
-import Landing from "layouts/Landing/Landing.js";
-import HomeArtist from "layouts/Artist/HomeArtist.js";
+import LandingLayout from "layouts/Landing/Landing.js";
+import ArtistLayout from "layouts/Artist/Artist.js";
 
 // context
 import injectContext from "./store/appContext";
@@ -23,8 +23,14 @@ const MainComponent = () => {
 				<BrowserRouter>
 					<Switch>
 						<Route path="/admin" render={props => <AdminLayout {...props} />} />
-						<Route path="/landing" render={props => <Landing {...props} />} />
-						<Route path="/artist" render={props => <HomeArtist {...props} />} />
+						<Route
+							path="/landing"
+							render={props => <LandingLayout {...props} />}
+						/>
+						<Route
+							path="/artist"
+							render={props => <ArtistLayout {...props} />}
+						/>
 						<Redirect from="/" to="/landing" />
 					</Switch>
 				</BrowserRouter>

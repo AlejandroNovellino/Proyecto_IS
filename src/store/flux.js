@@ -1,15 +1,12 @@
 const URLAPI = "http://localhost:5000";
+const TOKEN = "ABCDEFGHIJK12345678";
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			user: null,
-			username: null,
-			firstName: null,
-			lastName: null,
-			age: null,
-			nationality: null,
-			bio: null,
-			projects: null,
+			token: "",
+			workingProjectId: null,
 		},
 		actions: {
 			// Use getActions to call a function within a function
@@ -28,7 +25,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						let body = await response.json();
 						setStore({
 							user: body.artist,
+							token: TOKEN,
 						});
+						// set the local storage
+						localStorage.setItem("token", TOKEN);
+						localStorage.setItem("user", JSON.stringify(body.artist));
+
 						return true;
 					}
 					return false;
@@ -51,7 +53,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						let body = await response.json();
 						setStore({
 							user: body.artist,
+							token: TOKEN,
 						});
+						// set the local storage
+						localStorage.setItem("token", TOKEN);
+						localStorage.setItem("user", JSON.stringify(body.artist));
+
 						return true;
 					}
 					return false;
@@ -62,13 +69,91 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logOut: _ => {
 				setStore({
 					user: null,
+					token: "",
 				});
 			},
 			setToken: (token, user) => {
 				setStore({
-					token,
 					user: JSON.parse(user),
+					token,
 				});
+			},
+			createProject: async projectInfo => {
+				try {
+					let response = await fetch(`${URLAPI}/project`, {
+						method: "POST",
+						body: JSON.stringify({
+							...projectInfo,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+					if (response.ok) {
+						let body = await response.json();
+						setStore({
+							user: body.artist,
+						});
+
+						return true;
+					}
+					return false;
+				} catch {
+					return false;
+				}
+			},
+			createProjectVersion: async projectInfo => {
+				try {
+					let response = await fetch(`${URLAPI}/project-version`, {
+						method: "POST",
+						body: JSON.stringify({
+							...projectInfo,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+					if (response.ok) {
+						let body = await response.json();
+						setStore({
+							user: body.artist,
+						});
+
+						return true;
+					}
+					return false;
+				} catch {
+					return false;
+				}
+			},
+			setWorkingProjectId: projectId => {
+				setStore({
+					workingProjectId: projectId,
+				});
+			},
+			createPoll: async pollInfo => {
+				try {
+					let response = await fetch(`${URLAPI}/poll`, {
+						method: "POST",
+						body: JSON.stringify({
+							...pollInfo,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+					if (response.ok) {
+						let body = await response.json();
+						setStore({
+							user: body.artist,
+						});
+
+						return true;
+					}
+					return false;
+				} catch {
+					return false;
+				}
 			},
 			uploadCathedrasFile: async myFile => {
 				try {
@@ -148,24 +233,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				} catch {
 					return false;
-				}
-			},
-			getAllCountries: async _ => {
-				try {
-					let response = await fetch(
-						"https://restcountries.eu/rest/v2/all?fields=name"
-					);
-
-					if (response.ok) {
-						const data = await response.json();
-						setStore({
-							nationalities: data,
-						});
-					} else {
-						return [];
-					}
-				} catch {
-					return [];
 				}
 			},
 			getAllCareers: async () => {

@@ -15,7 +15,6 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import HomeArtist from "layouts/Artist/HomeArtist";
 import Dashboard from "views/Dashboard.js";
 import Icons from "views/Icons.js";
 import Login from "views/Login";
@@ -25,6 +24,8 @@ import SignIn from "views/SignIn";
 import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
+// artist components
+import Projects from "views/ArtistViews/Projects";
 
 var routes = [
 	{
@@ -100,11 +101,11 @@ var routes = [
 		layout: "/landing",
 	},
 	{
-		path: "/home",
-		name: "HomeArtist",
+		path: "/projects",
+		name: "Projects",
 		rtlName: "",
-		icon: "",
-		component: HomeArtist,
+		icon: "fas fa-project-diagram",
+		component: Projects,
 		layout: "/artist",
 	},
 ];

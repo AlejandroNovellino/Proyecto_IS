@@ -68,7 +68,7 @@ function Login(props) {
 
 	const logIn = async () => {
 		if (await actions.logIn(userInfo)) {
-			history.push("/artist/home");
+			history.push("/artist");
 		} else {
 			notifyAlert("Oh no! Combination of username and password invalid :c");
 		}
