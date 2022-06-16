@@ -71,10 +71,7 @@ function Sidebar(props) {
 				<div className="sidebar" data={color}>
 					<div className="sidebar-wrapper" ref={sidebarRef}>
 						{logoImg !== null || logoText !== null ? (
-							<div className="logo">
-								{logoImg}
-								{logoText}
-							</div>
+							<div className="logo">{logoImg}</div>
 						) : null}
 						<Nav>
 							{routes.map((prop, key) => {

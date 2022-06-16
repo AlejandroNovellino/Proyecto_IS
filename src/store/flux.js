@@ -155,327 +155,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
-			uploadCathedrasFile: async myFile => {
+			getProjectById: _ => {
+				if (!getStore().workingProjectId) return null;
+
+				const idToFind = getStore().workingProjectId;
+				const project = getStore().user?.projects.filter(
+					project => project.id == idToFind
+				);
+
+				return project[0];
+			},
+			uploadBaseProjectFile: async data => {
 				try {
-					const response = await fetch(`${URLAPI}/upload-cathedras`, {
+					const response = await fetch(`${URLAPI}/file`, {
 						method: "POST",
-						body: myFile,
+						body: data,
 					});
 
 					if (response.ok) {
-						return true;
-					} else {
-						return false;
-					}
-				} catch {
-					return false;
-				}
-			},
-			uploadCoursesFile: async myFile => {
-				try {
-					const response = await fetch(`${URLAPI}/upload-courses`, {
-						method: "POST",
-						body: myFile,
-					});
-
-					if (response.ok) {
-						return true;
-					} else {
-						return false;
-					}
-				} catch {
-					return false;
-				}
-			},
-			uploadGradesFile: async myFile => {
-				try {
-					const response = await fetch(`${URLAPI}/upload-grades`, {
-						method: "POST",
-						body: myFile,
-					});
-
-					if (response.ok) {
-						return true;
-					} else {
-						return false;
-					}
-				} catch {
-					return false;
-				}
-			},
-			uploadProfessorsFile: async myFile => {
-				try {
-					const response = await fetch(`${URLAPI}/upload-professors`, {
-						method: "POST",
-						body: myFile,
-					});
-
-					if (response.ok) {
-						return true;
-					} else {
-						return false;
-					}
-				} catch {
-					return false;
-				}
-			},
-			uploadStudentsFile: async myFile => {
-				try {
-					const response = await fetch(`${URLAPI}/upload-students`, {
-						method: "POST",
-						body: myFile,
-					});
-
-					if (response.ok) {
-						return true;
-					} else {
-						return false;
-					}
-				} catch {
-					return false;
-				}
-			},
-			getAllCareers: async () => {
-				try {
-					let response = await fetch(`${URLAPI}/careers`);
-
-					if (response.ok) {
-						const data = await response.json();
-						let careers = data.map(element => {
-							return element[0].toUpperCase() + element.slice(1);
-						});
+						let body = await response.json();
 						setStore({
-							careers: careers,
+							user: body.artist,
 						});
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			getAllElementInfo: async elementName => {
-				try {
-					const response = await fetch(`${URLAPI}/${elementName}/info`);
 
-					if (response.ok) {
-						const data = await response.json();
-						return data;
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			getAllCathedrasFromCareer: async career => {
-				try {
-					const response = await fetch(`${URLAPI}/cathedras/${career}`);
-
-					if (response.ok) {
-						const data = await response.json();
-						setStore({
-							cathedras: data,
-						});
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			getActivesCoursesFromCareer: async career => {
-				try {
-					const response = await fetch(`${URLAPI}/courses/${career}`);
-
-					if (response.ok) {
-						const data = await response.json();
-						return data;
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			getCourseByCode: async code => {
-				try {
-					const response = await fetch(`${URLAPI}/courses/byCode/${code}`);
-					if (response.ok) {
-						const data = response.json();
-						return data;
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			createUser: async (email, password, role, professor_id) => {
-				try {
-					let response = await fetch(`${URLAPI}/sign-up`, {
-						method: "POST",
-						body: {
-							email: email,
-							password: password,
-							role: role,
-							professor_id: professor_id,
-						},
-						header: {
-							"Content-Type": "application/json",
-						},
-					});
-
-					if (response.ok) {
-						const new_professor = response.json();
-						return new_professor;
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			createProfessor: async (...params) => {
-				try {
-					const response = await fetch(`${URLAPI}/professor`, {
-						method: "POST",
-						body: JSON.stringify({
-							fullName: params[0],
-							ci: params[1],
-							phoneNumber: params[2],
-							age: params[3],
-							nationality: params[4],
-							residence: params[5],
-							career: params[6],
-							cathedras: params[7],
-							email: params[8],
-							role: params[9],
-						}),
-						headers: {
-							"Content-Type": "application/json",
-						},
-					});
-				} catch {
-					return null;
-				}
-			},
-			createStudent: async (...params) => {
-				try {
-					const response = await fetch(`${URLAPI}/student`, {
-						method: "POST",
-						body: JSON.stringify({
-							fullName: params[0],
-							ci: params[1],
-							phoneNumber: params[2],
-							age: params[3],
-							nationality: params[4],
-							residence: params[5],
-							career: params[6],
-						}),
-						headers: {
-							"Content-Type": "application/json",
-						},
-					});
-					if (response.ok) {
-						const data = response.json();
-						return data;
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			createInscription: async (student_id, course_id) => {
-				try {
-					const response = await fetch(`${URLAPI}/inscription`, {
-						method: "GET",
-						body: JSON.stringify({
-							student_id: student_id,
-							course_id: course_id,
-						}),
-						headers: {
-							"Content-Type": "application/json",
-						},
-					});
-					if (response.ok) {
-						const data = response.json();
-						return data;
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			createEvaluation: async (course_id, name, percentage) => {
-				try {
-					const response = await fetch(`${URLAPI}/evaluation`, {
-						method: "POST",
-						body: JSON.stringify({
-							course_id,
-							name,
-							percentage,
-						}),
-						headers: {
-							"Content-Type": "application/json",
-						},
-					});
-
-					if (response.ok) {
-						const data = await response.json();
-						return data;
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			modifyUserRole: async (email, role) => {
-				try {
-					const response = await fetch(`${URLAPI}/users/${email}`, {
-						method: "PUT",
-						body: JSON.stringify({
-							role,
-						}),
-						headers: {
-							"Content-Type": "application/json",
-						},
-					});
-
-					if (response.ok) {
-						const data = await response.json();
-						return data;
-					} else {
-						return null;
-					}
-				} catch {
-					return null;
-				}
-			},
-			createInfoFile: async neededInfo => {
-				try {
-					const response = await fetch(`${URLAPI}/create/${neededInfo}/file`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "multipart/form-data",
-						},
-					});
-
-					if (response.ok) {
-						const data = await response.json();
-						return data.fileName;
+						return true;
 					} else {
 						return false;
 					}
 				} catch {
 					return false;
 				}
-			},
-			getFileUrl: async (nature, fileName) => {
-				return `${URLAPI}/static-file/${nature}/${fileName}`;
 			},
 		},
 	};

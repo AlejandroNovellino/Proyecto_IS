@@ -26,8 +26,6 @@ function CreatePollModal(props) {
 	const { store, actions } = React.useContext(Context);
 	// user inputs
 	const [question, setQuestion] = React.useState("");
-	const [header, setHeader] = React.useState("");
-	const [description, setDescription] = React.useState("");
 	// elements for the alerts
 	const notificationAlertRef = React.useRef(null);
 	const notifyAlert = message => {
@@ -107,7 +105,12 @@ function CreatePollModal(props) {
 				</div>
 				<Card body className="mb-0">
 					<CardHeader>
-						<h1>New poll</h1>
+						<h1>
+							New poll for:{" "}
+							<b>
+								{actions.getProjectById() && actions.getProjectById().tittle}
+							</b>
+						</h1>
 					</CardHeader>
 					<CardBody>
 						<CardSubtitle className="my-2 text-muted" tag="h4">

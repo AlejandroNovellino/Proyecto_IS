@@ -89,7 +89,12 @@ function CreateProjectVersionModal(props) {
 				</div>
 				<Card body className="mb-0">
 					<CardHeader>
-						<h1>New project version</h1>
+						<h1>
+							New project version for:{" "}
+							<b>
+								{actions.getProjectById() && actions.getProjectById().tittle}
+							</b>
+						</h1>
 					</CardHeader>
 					<CardBody>
 						<Form>

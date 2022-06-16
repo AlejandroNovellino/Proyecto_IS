@@ -5,6 +5,16 @@ import {} from "reactstrap";
 import { Bar } from "react-chartjs-2";
 
 function PollChart(props) {
+	const getMax = _ => {
+		let numberOfYes = props.pollAnswers[0].votes;
+		let numberOfNo = props.pollAnswers[1].votes;
+
+		// if no body have voted
+		if (numberOfYes === 0 && numberOfNo === 0) return 5;
+
+		return numberOfYes > numberOfNo ? numberOfYes : numberOfNo;
+	};
+
 	let chartInfo = {
 		data: canvas => {
 			let ctx = canvas.getContext("2d");
@@ -58,7 +68,7 @@ function PollChart(props) {
 						},
 						ticks: {
 							suggestedMin: 0,
-							suggestedMax: 20,
+							suggestedMax: getMax(),
 							padding: 20,
 							fontColor: "#9e9e9e",
 						},

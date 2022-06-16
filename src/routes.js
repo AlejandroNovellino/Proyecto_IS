@@ -26,6 +26,7 @@ import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
 // artist components
 import Projects from "views/ArtistViews/Projects";
+import ArtistProfile from "views/ArtistViews/ArtistProfile";
 
 var routes = [
 	{
@@ -106,6 +107,14 @@ var routes = [
 		rtlName: "",
 		icon: "fas fa-project-diagram",
 		component: Projects,
+		layout: "/artist",
+	},
+	{
+		path: "/user-info",
+		name: "Artist Profile",
+		rtlName: "",
+		icon: "fas fa-user",
+		component: ArtistProfile,
 		layout: "/artist",
 	},
 ];

@@ -40,6 +40,8 @@ project = {
 
 function ProjectCard(props) {
 	const [projectId, setProjectId] = useState(props.id);
+	const [selectedFile, setSelectedFile] = useState();
+	const [filePicked, setFilePicked] = useState(false);
 	// context
 	const { store, actions } = React.useContext(Context);
 
@@ -53,9 +55,32 @@ function ProjectCard(props) {
 		props.modalToggle();
 	};
 
+	const fileAddHandler = e => {
+		setSelectedFile(e.target.files[0]);
+		setFilePicked(true);
+	};
+
+	const addFileToProject = async () => {
+		if (filePicked) {
+			const data = new FormData();
+			data.append("file", selectedFile, selectedFile.name);
+			data.append("project_id", projectId);
+			data.append("artist_id", store.user.id);
+
+			let response = await actions.uploadBaseProjectFile(data);
+			if (response) {
+				setSelectedFile(null);
+				setFilePicked(false);
+				props.notifyAlert("File uploaded successfully! :D", "info");
+			} else {
+				props.notifyAlert("Failed to upload file! :c", "danger");
+			}
+		}
+	};
+
 	return (
 		<>
-			<Card body>
+			<Card body className="card-chart px-5">
 				<CardHeader></CardHeader>
 				<CardBody>
 					<CardTitle tag="h1">{props.tittle}</CardTitle>
@@ -100,7 +125,55 @@ function ProjectCard(props) {
 						Create new version
 					</Button>
 					<br />
-					{props?.header && (
+					<CardSubtitle className="my-2" tag="h4">
+						Files:
+					</CardSubtitle>
+					<Table className="tablesorter" responsive>
+						<thead className="text-primary">
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							{props?.files &&
+								props.files.map((file, index) => {
+									return (
+										<tr key={index}>
+											<td>{index + 1}</td>
+											<td>{file.filename}</td>
+										</tr>
+									);
+								})}
+						</tbody>
+					</Table>
+					<Row className="mt-2">
+						<Col md="10">
+							<div className="custom-file">
+								<input
+									type="file"
+									className="custom-file-input"
+									onChange={fileAddHandler}
+								/>
+								<label className="custom-file-label">
+									Add a file to the project
+								</label>
+							</div>
+						</Col>
+						<Col md="2">
+							<Button
+								block
+								className="btn-fill"
+								size="sm"
+								color="primary"
+								onClick={addFileToProject}>
+								Add
+							</Button>
+						</Col>
+					</Row>
+
+					<br />
+					{props?.polls && (
 						<CardSubtitle className="mt-2 mb-3" tag="h4">
 							Polls:
 						</CardSubtitle>

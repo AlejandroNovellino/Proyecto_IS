@@ -30,6 +30,7 @@ import {
 	Input,
 	Row,
 	Col,
+	FormText,
 } from "reactstrap";
 
 import { Link, useHistory } from "react-router-dom";
@@ -38,6 +39,12 @@ import countryList from "variables/countries.js";
 import NotificationAlert from "react-notification-alert";
 // context
 import { Context } from "../store/appContext";
+// regex constants
+import {
+	emailRegex,
+	passwordRegex,
+	nameRegex,
+} from "variables/regularExpressions";
 
 function SignIn() {
 	// context
@@ -75,26 +82,49 @@ function SignIn() {
 	const obligatoryDataExist = () => {
 		return username && email && password && passwordAux;
 	};
+	const emailCorrect = () => {
+		return emailRegex.test(email);
+	};
+	const passwordCorrect = () => {
+		return passwordRegex.test(password);
+	};
+	const passwordEqualsVerify = () => {
+		return password === passwordAux;
+	};
+	const verifyNames = name => {
+		return !nameRegex.test(name);
+	};
 
 	const infoDict = () => {
-		return {
-			username,
-			email,
-			password,
-			firstName,
-			lastName,
-			age,
-			nationality,
-			bio,
-		};
+		let returnDict = {};
+		if (username) returnDict.username = username;
+		if (email) returnDict.email = email;
+		if (password) returnDict.password = password;
+		if (firstName) returnDict.first_name = firstName;
+		if (lastName) returnDict.last_name = lastName;
+		if (age) returnDict.age = age;
+		if (nationality) returnDict.nationality = nationality;
+		if (bio) returnDict.bio = bio;
+
+		return returnDict;
 	};
 
 	const createUser = async () => {
 		if (!obligatoryDataExist()) {
 			notifyAlert("Obligatory information missing! :c");
+		} else if (!emailCorrect()) {
+			notifyAlert("You have entered an invalid email address! \\O.O/");
+		} else if (!passwordCorrect()) {
+			notifyAlert("You have entered an invalid password! \\O.O/");
+		} else if (!passwordEqualsVerify()) {
+			notifyAlert("The passwords does not match! \\O.O/");
+		} else if (!verifyNames(firstName)) {
+			notifyAlert("First name cannot contain special characters \\O.O/");
+		} else if (!verifyNames(lastName)) {
+			notifyAlert("Last name cannot contain special characters \\O.O/");
 		} else {
 			if (await actions.signIn(infoDict())) {
-				history.push("/artist/home");
+				history.push("/artist");
 			} else {
 				notifyAlert("An error ocurred! :c");
 			}
@@ -128,7 +158,7 @@ function SignIn() {
 													placeholder=""
 													type="text"
 													value={username}
-													onChange={e => setUsername(e.target.value)}
+													onChange={e => setUsername(e.target.value.trim())}
 												/>
 											</FormGroup>
 										</Col>
@@ -139,31 +169,37 @@ function SignIn() {
 													placeholder="example@art.com"
 													type="email"
 													value={email}
-													onChange={e => setEmail(e.target.value)}
+													onChange={e => setEmail(e.target.value.trim())}
 												/>
 											</FormGroup>
 										</Col>
 									</Row>
-									<Row>
+									<Row className="mb-3">
 										<Col className="pr-md-1" md="6">
 											<FormGroup>
 												<label>Password</label>
 												<Input
+													className="mb-1"
 													placeholder=""
 													type="password"
 													value={password}
-													onChange={e => setPassword(e.target.value)}
+													onChange={e => setPassword(e.target.value.trim())}
 												/>
+												<FormText>
+													Password have to be between 7 to 15 characters with at
+													least one numeric digit and a special character like
+													!@#$%^&*
+												</FormText>
 											</FormGroup>
 										</Col>
-										<Col className="px-md-1" md="6">
+										<Col className="pr-md-1" md="6">
 											<FormGroup>
 												<label>Password again please :D</label>
 												<Input
 													placeholder=""
 													type="password"
 													value={passwordAux}
-													onChange={e => setPasswordAux(e.target.value)}
+													onChange={e => setPasswordAux(e.target.value.trim())}
 												/>
 											</FormGroup>
 										</Col>
@@ -181,18 +217,18 @@ function SignIn() {
 													placeholder=""
 													type="text"
 													value={firstName}
-													onChange={e => setFirstName(e.target.value)}
+													onChange={e => setFirstName(e.target.value.trim())}
 												/>
 											</FormGroup>
 										</Col>
-										<Col className="pl-md-1" md="6">
+										<Col className="pr-md-1" md="6">
 											<FormGroup>
 												<label>Last Name</label>
 												<Input
 													placeholder=""
 													type="text"
 													value={lastName}
-													onChange={e => setLastName(e.target.value)}
+													onChange={e => setLastName(e.target.value.trim())}
 												/>
 											</FormGroup>
 										</Col>
@@ -205,11 +241,18 @@ function SignIn() {
 													placeholder=""
 													type="number"
 													value={age}
-													onChange={e => setAge(e.target.value)}
+													onChange={e => {
+														let ageNumber = parseInt(e.target.value);
+														if (ageNumber < 0) {
+															setAge(0);
+														} else {
+															setAge(ageNumber);
+														}
+													}}
 												/>
 											</FormGroup>
 										</Col>
-										<Col className="px-md-1" md="6">
+										<Col className="pr-md-1" md="6">
 											<FormGroup>
 												<label>Nationality</label>
 												<Input

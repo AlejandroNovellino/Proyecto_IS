@@ -28,7 +28,7 @@ function Projects() {
 	const pollModalToggler = () => setPollModal(!pollModal);
 	// elements for the alerts
 	const notificationAlertRef = React.useRef(null);
-	const notifyAlert = message => {
+	const notifyAlert = (message, type) => {
 		let options = {
 			place: "tc",
 			message: (
@@ -36,7 +36,7 @@ function Projects() {
 					<div>{message}</div>
 				</div>
 			),
-			type: "danger",
+			type: type,
 			icon: "tim-icons icon-bell-55",
 			autoDismiss: 7,
 		};
@@ -121,6 +121,7 @@ function Projects() {
 										{...project}
 										toggle={versionModalToggler}
 										modalToggle={pollModalToggler}
+										notifyAlert={notifyAlert}
 										key={index}
 									/>
 								);
