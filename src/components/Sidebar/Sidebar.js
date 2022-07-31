@@ -78,6 +78,11 @@ function Sidebar(props) {
 								if (prop.redirect) return null;
 								if (prop.layout == "/landing") return null;
 								if (prop.layout == "/admin") return null;
+								if (
+									prop.layout == "/artist" &&
+									prop.path == "/explore/project-info"
+								)
+									return null;
 								return (
 									<li
 										className={

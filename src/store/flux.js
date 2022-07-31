@@ -155,6 +155,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
+			getAllProjects: async _ => {
+				try {
+					let response = await fetch(`${URLAPI}/projects`);
+					if (response.ok) {
+						let body = await response.json();
+
+						return body.projects;
+					}
+					return null;
+				} catch {
+					return null;
+				}
+			},
 			getProjectById: _ => {
 				if (!getStore().workingProjectId) return null;
 
@@ -170,6 +183,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`${URLAPI}/file`, {
 						method: "POST",
 						body: data,
+					});
+
+					if (response.ok) {
+						let body = await response.json();
+						setStore({
+							user: body.artist,
+						});
+
+						return true;
+					} else {
+						return false;
+					}
+				} catch {
+					return false;
+				}
+			},
+			updatePoll: async data => {
+				try {
+					const response = await fetch(`${URLAPI}/poll`, {
+						method: "PUT",
+						body: JSON.stringify({
+							...data,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+
+					if (response.ok) {
+						return true;
+					} else {
+						return false;
+					}
+				} catch {
+					return false;
+				}
+			},
+			createComment: async data => {
+				try {
+					const response = await fetch(`${URLAPI}/comment`, {
+						method: "POST",
+						body: JSON.stringify({
+							...data,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
 					});
 
 					if (response.ok) {

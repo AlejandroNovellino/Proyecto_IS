@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 // reactstrap components
 import {
+	Container,
 	Row,
 	Col,
 	Card,
@@ -84,6 +85,7 @@ function ProjectCard(props) {
 				<CardHeader></CardHeader>
 				<CardBody>
 					<CardTitle tag="h1">{props.tittle}</CardTitle>
+					<hr style={{ borderTop: "1px solid white" }} />
 					<CardSubtitle className="my-2" tag="h4">
 						{props?.header}
 					</CardSubtitle>
@@ -174,9 +176,12 @@ function ProjectCard(props) {
 
 					<br />
 					{props?.polls && (
-						<CardSubtitle className="mt-2 mb-3" tag="h4">
-							Polls:
-						</CardSubtitle>
+						<>
+							<hr style={{ borderTop: "1px solid white" }} />
+							<CardSubtitle className="mt-2 mb-3" tag="h4">
+								Polls:
+							</CardSubtitle>
+						</>
 					)}
 					{props?.polls &&
 						props.polls.map((poll, index) => {
@@ -191,6 +196,20 @@ function ProjectCard(props) {
 						onClick={newPollHandler}>
 						Create new poll
 					</Button>
+					<hr style={{ borderTop: "1px solid white" }} />
+					<CardSubtitle className="mt-2 mb-3" tag="h4">
+						Comments:
+					</CardSubtitle>
+					{!props?.comments && <p>No comments in the project for now :D</p>}
+					{props?.comments &&
+						props?.comments.map((comment, index) => {
+							return (
+								<Container key={index} className="px-5">
+									<CardText>{comment?.text}</CardText>
+									<hr style={{ borderTop: "1px solid aqua" }} />
+								</Container>
+							);
+						})}
 				</CardBody>
 				<CardFooter>
 					<Row className="justify-content-center">
